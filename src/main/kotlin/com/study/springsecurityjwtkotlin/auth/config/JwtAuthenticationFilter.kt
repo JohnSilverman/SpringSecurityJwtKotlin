@@ -1,6 +1,6 @@
 package com.study.springsecurityjwtkotlin.auth.config
 
-import com.study.springsecurityjwtkotlin.auth.repository.FakeUserRepository
+import com.study.springsecurityjwtkotlin.auth.service.CustomUserDetailsService
 import com.study.springsecurityjwtkotlin.auth.service.JwtUtilService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -14,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Component
 class JwtAuthenticationFilter(
     private val jwtUtilService: JwtUtilService,
-    private val fakeUserRepository: FakeUserRepository
+    private val customUserDetailsService: CustomUserDetailsService
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -33,7 +33,7 @@ class JwtAuthenticationFilter(
             val username = jwtUtilService.extractSubject(token)
 
             // 4. retrieve user info from db
-            val userDetails = fakeUserRepository.getUserByUsername(username)
+            val userDetails = customUserDetailsService.loadUserByUsername(username)
 
             // 5. set authentication to security context
             val authToken = UsernamePasswordAuthenticationToken( // implements Authentication
