@@ -26,7 +26,6 @@ class JwtAuthenticationFilter(
         val authHeader : String? = request.getHeader("Authorization")
         val token = authHeader?.replace("Bearer ", "") ?: ""
 
-        println("token = $token")
         // 2. validate token
         if (jwtUtilService.isTokenValid(token)) {
             // 3. retrieve user info from token
